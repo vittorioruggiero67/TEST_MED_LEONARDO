@@ -1,0 +1,50 @@
+#!/bin/bash
+# Location and name of my EXE
+#MY_EXE="/home/vittorio/ICON_CSCS/icon-cscs/config/hal/bin/icon"
+MY_EXE=" /home/vittorio/ICON_CSCS/NEW/icon-cscs-master/config/hal/bin/icon"
+#MY_EXE="nvprof -o output.%h.%p.%q{OMPI_COMM_WORLD_RANK}  /home/vittorio/ICON_CSCS/NEW/icon-cscs-master/config/hal/bin/icon"
+##########MY_EXE="  /home/vittorio/ICON_CSCS/NEW/icon-cscs-master/config/hal_openmpi-5.0.5/bin/icon"
+#MY_EXE="/home/vittorio/ICON_CSCS/NEW/icon-cscs-master/config/hal_openmpi-5.0.3/bin/icon"
+
+# Here we got the MPI_RANK of this process
+lrank=$OMPI_COMM_WORLD_LOCAL_RANK
+ltot_rank=$OMPI_COMM_WORLD_RANK
+#lrank=$MV2_COMM_WORLD_LOCAL_RANK
+#lrank=$SLURM_LOCALID
+#ltot_rank=$SLURM_PROCID
+lhost=`hostname`
+#echo "My rank is:  $lrank running on host: $lhost"
+echo "My rank is:  $lrank running on host: $lhost sono rank globale $ltot_rank"
+#echo "pippo $MV2_COMM_WORLD_SIZE"
+
+case ${lrank} in
+[0])
+  export CUDA_VISIBLE_DEVICES=0
+  $MY_EXE
+  ;;
+[1])
+  export CUDA_VISIBLE_DEVICES=1
+  $MY_EXE
+  ;;
+[2])
+  export CUDA_VISIBLE_DEVICES=2
+  $MY_EXE
+  ;;
+[3])
+  export CUDA_VISIBLE_DEVICES=3
+  $MY_EXE
+  ;;
+[4])
+  export CUDA_VISIBLE_DEVICES=3
+  $MY_EXE
+  ;;
+[5])
+#  export CUDA_VISIBLE_DEVICES=2
+  $MY_EXE
+  ;;
+[6])
+#  export CUDA_VISIBLE_DEVICES=1
+  $MY_EXE
+  ;;
+# Lets continue in this way up to 24 cores ...
+esac
